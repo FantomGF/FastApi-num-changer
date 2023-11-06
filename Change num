@@ -1,0 +1,49 @@
+from fastapi import FastAPI, Response
+
+app = FastAPI()
+
+
+@app.post("/post/{n}")
+def post_num(n:int):
+    global num
+    num = n
+    return num
+
+
+@app.get("/get")
+def get_num():
+     if 'num' in globals():
+        if num is not None:
+            return num
+
+        else:
+            return Response(content="num is deleted")
+
+     else:
+         return Response(content="num not created")
+
+
+@app.put("/put/{p}")
+def put_num(p: int):
+    if 'num' in globals():
+        global num
+        if num is not None:
+            num = p
+            return Response(content=f"num was put to {num}")
+
+        else:
+            return Response(content="num is deleted")
+
+    else:
+        return Response(content="num not created")
+
+@app.delete("/delete")
+def delete_num():
+    if 'num' in globals():
+        global num
+        num = None
+        return Response(content="delete successful")
+    else:
+        return Response(content="num not created")
+
+
